@@ -16,11 +16,15 @@
                 <div style="text-align: center; padding: 10px 0px">
                     Selamat datang, <?= $this->session->get('login')['username'] ?>
                 </div>
-                <a href="<?= $this->url->get('/index') ?>"><button class="active">Reservasi</button></a>
-                <button>Ruang Rapat</button>
-                <button>Fasilitas</button>
-                <button>Konsumsi</button>
-                <button>Vendor</button>
+                <a href="<?= $this->url->get('/index') ?>"><button class="active">Dashboard</button></a>
+                <?php if ($this->session->get('login')['username'] == 'admin') { ?>
+                <button>Bahan Baku</button>
+                <button>Bahan Baku Masuk</button>
+                <button>Bahan Baku Keluar</button>
+                <?php } ?>
+                <?php if ($this->session->get('login')['username'] != 'admin') { ?>
+                <button>Pinjam Bahan Baku</button>
+                <?php } ?>
                 <div style="bottom: 0px; width: inherit; position: absolute">
                     <form action="<?= $this->url->get('/index/logout') ?>" method="post">
                         <button>Logout</button>
@@ -30,51 +34,133 @@
 
             <div class="tabcontent">
                 <div class="container">
+                    <?php if ($this->session->get('login')['username'] == 'admin') { ?>
                     <div class="card">
-                    <?php if (isset($reservasi)) { ?>
-                        <h3 class="card-header">Daftar Reservasi</h3>
+                        <?php if (isset($masuk)) { ?>
+                        <h3 class="card-header">Histori Bahan Baku Masuk</h3>
                         <table class="table table-bordered table-responsive-sm" id="calendar">
                             <thead>
                                 <tr>
-                                    <th> Judul Agenda </th>
-                                    <th> Peminjam </th>
-                                    <th> Ruangan </th>
+                                    <th> Nama Bahan </th>
+                                    <th> Kondisi Bahan </th>
+                                    <th> Jumlah Bahan </th>
+                                    <th> Tanggal Masuk </th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php foreach ($reservasi as $reserve) { ?>
-                                    <?php foreach ($ruangan as $ruang) { ?>
-                                        <?php foreach ($users as $user) { ?>
-                                            <?php if ($ruang->id_ruangan == $reserve->id_ruangan && $user->id_user == $reserve->id_peminjam) { ?>
+                                <?php foreach ($masuk as $log_masuk) { ?>
+                                    <?php foreach ($bahanbaku as $bahan) { ?>
+                                        <?php if ($bahan->id_bahan == $log_masuk->id_bahan) { ?>
                                 <tr>
-                                    <?= $this->tag->form(['index/detail', 'method' => 'post']) ?>
                                     <td>
-                                        <?= $this->tag->hiddenField(['no_surat', 'value' => $reserve->no_surat]) ?>
-                                        <?= $this->tag->submitButton([$reserve->nama_agenda, 'style' => 'all: unset; cursor: pointer']) ?>
+                                        <?= $bahan->nama_bahan ?>
                                     </td>
                                     
                                     <td>
-                                        <?= $this->tag->hiddenField(['id_peminjam', 'value' => $user->id_user]) ?>
-                                        <?= $user->nama_pegawai ?>
+                                        <?= $log_masuk->kondisi_bahan ?>
                                     </td>
                                     
                                     <td>
-                                        <?= $this->tag->hiddenField(['id_ruangan', 'value' => $ruang->id_ruangan]) ?>
-                                        <?= $ruang->nama_ruangan ?>
+                                        <?= $log_masuk->jumlah_bahan ?>
                                     </td>
-                                    <?= $this->tag->endForm() ?>
+
+                                    <td>
+                                        <?= $log_masuk->date_masuk ?>
+                                    </td>
                                 </tr> 
+                                        <?php } ?>
+                                    <?php } ?>
+                                <?php } ?>
+                            </tbody>
+                        </table>
+                        <?php } ?>
+                    </div>
+                    <?php } ?>
+                    <br>
+                    <div class="card">
+                    <?php if (isset($keluar)) { ?>
+                        <?php if ($this->session->get('login')['username'] == 'admin') { ?>
+                        <h3 class="card-header">Histori Bahan Baku Keluar</h3>
+                        <?php } ?>
+                        <?php if ($this->session->get('login')['username'] != 'admin') { ?>
+                        <h3 class="card-header">Histori Bahan Baku Diambil</h3>
+                        <?php } ?>
+                        <table class="table table-bordered table-responsive-sm" id="calendar">
+                            <thead>
+                                <tr>
+                                    <?php if ($this->session->get('login')['username'] == 'admin') { ?>
+                                    <th> Nama Pengambil Bahan </th>
+                                    <?php } ?>
+                                    <th> Nama Bahan </th>
+                                    <th> Kondisi Bahan </th>
+                                    <th> Jumlah Bahan </th>
+                                    <th> Tanggal Masuk </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php if ($this->session->get('login')['username'] == 'admin') { ?>
+                                    <?php foreach ($keluar as $log_keluar) { ?>
+                                        <?php foreach ($users as $user) { ?>
+                                            <?php foreach ($bahanbaku as $bahan) { ?>
+                                                <?php if ($bahan->id_bahan == $log_keluar->id_bahan && $user->id_user == $log_keluar->id_user) { ?>
+                                <tr>
+                                    <td>
+                                        <?= $user->nama_karyawan ?>
+                                    </td>
+
+                                    <td>
+                                        <?= $bahan->nama_bahan ?>
+                                    </td>
+                                    
+                                    <td>
+                                        <?= $log_keluar->kondisi_bahan ?>
+                                    </td>
+                                    
+                                    <td>
+                                        <?= $log_keluar->jumlah_bahan ?>
+                                    </td>
+
+                                    <td>
+                                        <?= $log_keluar->date_keluar ?>
+                                    </td>
+                                </tr> 
+                                                <?php } ?>
+                                            <?php } ?>
+                                        <?php } ?>
+                                    <?php } ?>
+                                <?php } ?>
+
+                                <?php if ($this->session->get('login')['username'] != 'admin') { ?>
+                                    <?php foreach ($keluar as $log_keluar) { ?>
+                                        <?php foreach ($users as $user) { ?>
+                                            <?php foreach ($bahanbaku as $bahan) { ?>
+                                                <?php if ($bahan->id_bahan == $log_keluar->id_bahan && $user->username == $this->session->get('login')['username']) { ?>
+                                <tr>
+                                    <td>
+                                        <?= $bahan->nama_bahan ?>
+                                    </td>
+
+                                    <td>
+                                        <?= $log_keluar->kondisi_bahan ?>
+                                    </td>
+
+                                    <td>
+                                        <?= $log_keluar->jumlah_bahan ?>
+                                    </td>
+    
+                                    <td>
+                                        <?= $log_keluar->date_keluar ?>
+                                    </td>
+                                </tr>
+                                                <?php } ?>
                                             <?php } ?>
                                         <?php } ?>
                                     <?php } ?>
                                 <?php } ?>
                             </tbody>
                         </table>
-                        <a href="<?= $this->url->get('/index/form') ?>">
-                            <button class="btn2">Buat Reservasi Baru</button>
-                        </a>
-                    </div>
                     <?php } ?>
+                    </div>
                 </div>
             </div>
 		</div>

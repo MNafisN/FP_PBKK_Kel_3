@@ -16,11 +16,15 @@
                 <div style="text-align: center; padding: 10px 0px">
                     Selamat datang, {{ session.get('login')['username'] }}
                 </div>
-                <a href="{{ url('/index') }}"><button class="active">Reservasi</button></a>
-                <button>Ruang Rapat</button>
-                <button>Fasilitas</button>
-                <button>Konsumsi</button>
-                <button>Vendor</button>
+                <a href="{{ url('/index') }}"><button class="active">Dashboard</button></a>
+                {% if session.get('login')['username'] is 'admin' %}
+                <button>Bahan Baku</button>
+                <button>Bahan Baku Masuk</button>
+                <button>Bahan Baku Keluar</button>
+                {% endif %}
+                {% if session.get('login')['username'] is not 'admin' %}
+                <button>Pinjam Bahan Baku</button>
+                {% endif %}
                 <div style="bottom: 0px; width: inherit; position: absolute">
                     <form action="{{ url('/index/logout') }}" method="post">
                         <button>Logout</button>
@@ -30,51 +34,133 @@
 
             <div class="tabcontent">
                 <div class="container">
+                    {% if session.get('login')['username'] is 'admin' %}
                     <div class="card">
-                    {% if reservasi is defined %}
-                        <h3 class="card-header">Daftar Reservasi</h3>
+                        {% if masuk is defined %}
+                        <h3 class="card-header">Histori Bahan Baku Masuk</h3>
                         <table class="table table-bordered table-responsive-sm" id="calendar">
                             <thead>
                                 <tr>
-                                    <th> Judul Agenda </th>
-                                    <th> Peminjam </th>
-                                    <th> Ruangan </th>
+                                    <th> Nama Bahan </th>
+                                    <th> Kondisi Bahan </th>
+                                    <th> Jumlah Bahan </th>
+                                    <th> Tanggal Masuk </th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for reserve in reservasi %}
-                                    {% for ruang in ruangan %}
-                                        {% for user in users %}
-                                            {% if ruang.id_ruangan is reserve.id_ruangan and user.id_user is reserve.id_peminjam %}
+                                {% for log_masuk in masuk %}
+                                    {% for bahan in bahanbaku %}
+                                        {% if bahan.id_bahan is log_masuk.id_bahan %}
                                 <tr>
-                                    {{ form('index/detail', 'method': 'post') }}
                                     <td>
-                                        {{ hidden_field('no_surat', 'value': reserve.no_surat) }}
-                                        {{ submit_button(reserve.nama_agenda, 'style': 'all: unset; cursor: pointer') }}
+                                        {{ bahan.nama_bahan }}
                                     </td>
                                     
                                     <td>
-                                        {{ hidden_field('id_peminjam', 'value': user.id_user) }}
-                                        {{ user.nama_pegawai }}
+                                        {{ log_masuk.kondisi_bahan }}
                                     </td>
                                     
                                     <td>
-                                        {{ hidden_field('id_ruangan', 'value': ruang.id_ruangan) }}
-                                        {{ ruang.nama_ruangan }}
+                                        {{ log_masuk.jumlah_bahan }}
                                     </td>
-                                    {{ end_form() }}
+
+                                    <td>
+                                        {{ log_masuk.date_masuk }}
+                                    </td>
                                 </tr> 
-                                            {% endif %}
-                                        {% endfor %}
+                                        {% endif %}
                                     {% endfor %}
                                 {% endfor %}
                             </tbody>
                         </table>
-                        <a href="{{ url('/index/form') }}">
-                            <button class="btn2">Buat Reservasi Baru</button>
-                        </a>
+                        {% endif %}
                     </div>
                     {% endif %}
+                    <br>
+                    <div class="card">
+                    {% if keluar is defined %}
+                        {% if session.get('login')['username'] is 'admin' %}
+                        <h3 class="card-header">Histori Bahan Baku Keluar</h3>
+                        {% endif %}
+                        {% if session.get('login')['username'] is not 'admin' %}
+                        <h3 class="card-header">Histori Bahan Baku Diambil</h3>
+                        {% endif %}
+                        <table class="table table-bordered table-responsive-sm" id="calendar">
+                            <thead>
+                                <tr>
+                                    {% if session.get('login')['username'] is 'admin' %}
+                                    <th> Nama Pengambil Bahan </th>
+                                    {% endif %}
+                                    <th> Nama Bahan </th>
+                                    <th> Kondisi Bahan </th>
+                                    <th> Jumlah Bahan </th>
+                                    <th> Tanggal Masuk </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if session.get('login')['username'] is 'admin' %}
+                                    {% for log_keluar in keluar %}
+                                        {% for user in users %}
+                                            {% for bahan in bahanbaku %}
+                                                {% if bahan.id_bahan is log_keluar.id_bahan and user.id_user is log_keluar.id_user %}
+                                <tr>
+                                    <td>
+                                        {{ user.nama_karyawan }}
+                                    </td>
+
+                                    <td>
+                                        {{ bahan.nama_bahan }}
+                                    </td>
+                                    
+                                    <td>
+                                        {{ log_keluar.kondisi_bahan }}
+                                    </td>
+                                    
+                                    <td>
+                                        {{ log_keluar.jumlah_bahan }}
+                                    </td>
+
+                                    <td>
+                                        {{ log_keluar.date_keluar }}
+                                    </td>
+                                </tr> 
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endfor %}
+                                    {% endfor %}
+                                {% endif %}
+
+                                {% if session.get('login')['username'] is not 'admin' %}
+                                    {% for log_keluar in keluar %}
+                                        {% for user in users %}
+                                            {% for bahan in bahanbaku %}
+                                                {% if bahan.id_bahan is log_keluar.id_bahan and user.username is session.get('login')['username'] %}
+                                <tr>
+                                    <td>
+                                        {{ bahan.nama_bahan }}
+                                    </td>
+
+                                    <td>
+                                        {{ log_keluar.kondisi_bahan }}
+                                    </td>
+
+                                    <td>
+                                        {{ log_keluar.jumlah_bahan }}
+                                    </td>
+    
+                                    <td>
+                                        {{ log_keluar.date_keluar }}
+                                    </td>
+                                </tr>
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endfor %}
+                                    {% endfor %}
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    {% endif %}
+                    </div>
                 </div>
             </div>
 		</div>

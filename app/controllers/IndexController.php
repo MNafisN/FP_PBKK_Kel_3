@@ -1,8 +1,9 @@
 <?php
 
-// use Models\reservasiModel;
-// use Models\ruanganModel;
-// use Models\sirupatModel;
+use Models\logmasukModel;
+use Models\logkeluarModel;
+use Models\bahanbakuModel;
+use Models\simarModel;
 
 class IndexController extends ControllerBase
 {
@@ -14,11 +15,10 @@ class IndexController extends ControllerBase
             $this->assets->addCss('css/style.css');
             $this->assets->addCss('css/table.css');
 
-            // $this->view->reservasi = reservasiModel::find();
-            // $this->view->ruangan = ruanganModel::find();
-            // $this->view->users = sirupatModel::find();
-        
-            // var_dump($ruangan[0]->nama_ruangan);
+            $this->view->masuk = logmasukModel::find();
+            $this->view->keluar = logkeluarModel::find();
+            $this->view->bahanbaku = bahanbakuModel::find();
+            $this->view->users = simarModel::find();
         }
         else
         {
@@ -88,11 +88,6 @@ class IndexController extends ControllerBase
             $this->flashSession->error('Waktu kosong');
             return $this->response->redirect('/index/form');
         }
-        // echo $is_null; return false;
-
-        // $now = date("Y-m-d H:i:s");
-        // $date = new \DateTime($waktu_awal);
-        // $date2 = date($waktu_awal);
         function cekInput($from, $to, $date="now", $ruang, $peserta, $crash) {
             $date = new \DateTime($date);
             $from = new \DateTime($from);
@@ -158,26 +153,10 @@ class IndexController extends ControllerBase
             else 
             {
                 $this->flashSession->success('Reservasi ditambahkan');
-                // var_dump($success);
-                // return false;
 
                 return $this->response->redirect('/index/form');
             }
         }
-
-        // $success = $reservasi->save(
-        //     $this->request->getPost(),
-        //     [
-        //         "no_surat",
-        //         "id_peminjam",
-        //         "id_ruangan",
-        //         "nama_agenda",
-        //         "deskripsi",
-        //         "date_awal" . " " . "time_awal",
-        //         "date_akhir" . " " . "time_akhir",
-        //         "jumlah_peserta",
-        //     ]
-        // );
 
         $this->view->disable();
     }
