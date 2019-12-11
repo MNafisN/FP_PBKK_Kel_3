@@ -18,12 +18,12 @@
                 </div>
                 <a href="{{ url('/index') }}"><button class="active">Dashboard</button></a>
                 {% if session.get('login')['username'] is 'admin' %}
-                <button>Bahan Baku</button>
+                <a href="{{ url('bahanbaku/index') }}"><button>Bahan Baku</button></a>
                 <button>Bahan Baku Masuk</button>
                 <button>Bahan Baku Keluar</button>
                 {% endif %}
                 {% if session.get('login')['username'] is not 'admin' %}
-                <button>Pinjam Bahan Baku</button>
+                <button>Ambil Bahan Baku</button>
                 {% endif %}
                 <div style="bottom: 0px; width: inherit; position: absolute">
                     <form action="{{ url('/index/logout') }}" method="post">
@@ -44,7 +44,7 @@
                                     <th> Nama Bahan </th>
                                     <th> Kondisi Bahan </th>
                                     <th> Jumlah Bahan </th>
-                                    <th> Tanggal Masuk </th>
+                                    <th> Tanggal Keluar </th>
                                 </tr>
                             </thead>
                             <tbody>

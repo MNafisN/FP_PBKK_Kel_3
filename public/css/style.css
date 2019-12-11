@@ -140,6 +140,9 @@ a:hover {
 .alert.alert-danger {
 	background-color: rgba(232, 142, 137, 0.5);
 }
+.alert.alert-warning {
+	background-color: rgba(232, 226, 137, 0.5);
+}
 .alert.alert-success, .alert.alert-info {
 	background-color: rgba(140, 203, 222, 0.5);
 }

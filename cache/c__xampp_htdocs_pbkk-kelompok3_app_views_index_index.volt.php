@@ -18,12 +18,12 @@
                 </div>
                 <a href="<?= $this->url->get('/index') ?>"><button class="active">Dashboard</button></a>
                 <?php if ($this->session->get('login')['username'] == 'admin') { ?>
-                <button>Bahan Baku</button>
+                <a href="<?= $this->url->get('bahanbaku/index') ?>"><button>Bahan Baku</button></a>
                 <button>Bahan Baku Masuk</button>
                 <button>Bahan Baku Keluar</button>
                 <?php } ?>
                 <?php if ($this->session->get('login')['username'] != 'admin') { ?>
-                <button>Pinjam Bahan Baku</button>
+                <button>Ambil Bahan Baku</button>
                 <?php } ?>
                 <div style="bottom: 0px; width: inherit; position: absolute">
                     <form action="<?= $this->url->get('/index/logout') ?>" method="post">
@@ -44,7 +44,7 @@
                                     <th> Nama Bahan </th>
                                     <th> Kondisi Bahan </th>
                                     <th> Jumlah Bahan </th>
-                                    <th> Tanggal Masuk </th>
+                                    <th> Tanggal Keluar </th>
                                 </tr>
                             </thead>
                             <tbody>

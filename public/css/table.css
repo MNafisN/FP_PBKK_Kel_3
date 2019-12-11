@@ -97,10 +97,10 @@ th {
     line-height: 1.5;
     border-radius: .25rem;
     transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
-    color: #17a2b8;
+    color: #563232;
     background-color: transparent;
     background-image: none;
-    border-color: #17a2b8;
+    border-color: #563232;
 }
 .btn2 {
     display: inline-block;
@@ -112,9 +112,14 @@ th {
     line-height: 1.5;
     border-radius: .25rem;
     transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
-    color: #17a2b8;
+    color: #563232;
     background-color: transparent;
-    border-color: #17a2b8;
+    border-color: #563232;
+    cursor: pointer;
+}
+.btn2:hover {
+    transition: 0.5s;
+    background-color: rgba(86, 50, 50, 0.2);
 }
 select.form-control:not([size]):not([multiple]) {
     height: calc(2.25rem + 2px);
@@ -127,7 +132,7 @@ select.form-control:not([size]):not([multiple]) {
     line-height: 1.5;
     background-color: inherit;
     background-clip: padding-box;
-    border: 1px solid #065F6F;
+    border: 1px solid #563232;
     border-radius: .25rem;
     transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
     display: inline-block;
@@ -148,8 +153,8 @@ select.form-control:not([size]):not([multiple]) {
     display: flex;
     padding: 10px 15px;
     margin-bottom: -1px;
-    background-color: #fff;
-    border: 1px solid #17a2b8;
+    background-color: rgba(255, 255, 255, 0);
+    border: 1px solid #563232;
 }
 .list-group-item:first-child {
     border-top-left-radius: 4px;

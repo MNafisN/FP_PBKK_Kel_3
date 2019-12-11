@@ -1,13 +1,13 @@
 {% block head %}
 	<meta charset="utf-8">
-	<title>SIRUPAT</title>
+	<title>SIMAR</title>
     {{ assets.outputCss() }}
 {% endblock %}
 {% block body %}
-    {% if session.has('login') %}
+    {% if session.get('login')['username'] is 'admin' %}
     <div class="header">
 		<div class="header-container">
-			SIRUPAT
+			SIMAR
 		</div>
     </div>
 	<div class="content">
@@ -16,11 +16,10 @@
                 <div style="text-align: center; padding: 10px 0px">
                     Selamat datang, {{ session.get('login')['username'] }}
                 </div>
-                <a href="{{ url('/index') }}"><button>Reservasi</button></a>
-                <a href="{{ url('/ruangan') }}"><button class="active">Ruang Rapat</button></a>
-                <a href="{{ url('/fasilitas') }}"><button>Fasilitas</button></a>
-                <button>Konsumsi</button>
-                <button>Vendor</button>
+                <a href="{{ url('/index') }}"><button>Dashboard</button></a>
+                <a href="{{ url('bahanbaku/index') }}"><button class="active">Bahan Baku</button></a>
+                <button>Bahan Baku Masuk</button>
+                <button>Bahan Baku Keluar</button>
                 <div style="bottom: 0px; width: inherit; position: absolute">
                     <form action="{{ url('/index/logout') }}" method="post">
                         <button>Logout</button>
@@ -31,37 +30,39 @@
             <div class="tabcontent">
                 <div class="container">
                     <div class="card">
-                    {% if ruangan is defined %}
-                        <h3 class="card-header">Daftar Ruangan</h3>
+                        {% if bahanbaku is defined %}
+                        <h3 class="card-header">Daftar Bahan Baku</h3>
                         <table class="table table-bordered table-responsive-sm" id="calendar">
                             <thead>
                                 <tr>
-                                    <th> Nama Ruangan </th>
-                                    <th> Lokasi </th>
+                                    <th> Nama Bahan </th>
+                                    <th> Kondisi Bahan </th>
+                                    <th> Jumlah Bahan </th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for ruang in ruangan %}
+                                {% for bahan in bahanbaku %}
                                 <tr>
-                                    {{ form('ruangan/detail', 'method': 'post') }}
                                     <td>
-                                        {{ hidden_field('id_ruangan', 'value': ruang.id_ruangan) }}
-                                        {{ submit_button(ruang.nama_ruangan, 'style': 'all: unset; cursor: pointer') }}
+                                        {{ bahan.nama_bahan }}
                                     </td>
                                     
                                     <td>
-                                        {{ ruang.lokasi_ruangan }}
+                                        {{ bahan.kondisi_bahan }}
                                     </td>
-                                    {{ end_form() }}
+                                    
+                                    <td>
+                                        {{ bahan.jumlah_bahan }}
+                                    </td>
                                 </tr> 
                                 {% endfor %}
                             </tbody>
                         </table>
-                        <a href="{{ url('/ruangan/form') }}">
-                            <button class="btn2">Buat Data Ruangan Baru</button>
+                        <a href="{{ url('/bahanbaku/form') }}">
+                            <button class="btn2">Tambahkan Jenis Bahan Baku</button>
                         </a>
+                        {% endif %}
                     </div>
-                    {% endif %}
                 </div>
             </div>
 		</div>

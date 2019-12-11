@@ -23,7 +23,7 @@ class LoginController extends ControllerBase
         if ($pass == $queryLogin->pass)
         {
             $this->session->set('login', ['username' => $queryLogin->username]);
-            // $this->view->admin = sirupatModel::findFirstByUsername($username);
+
             $this->response->redirect('/index');
         }
         elseif (!$queryLogin)            
