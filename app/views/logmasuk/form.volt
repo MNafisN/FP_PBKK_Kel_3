@@ -30,15 +30,15 @@
             <div class="tabcontent">
                 <div class="container">
                     <div class="card">
-                        <h2 class="card-header">Form Reservasi</h2>
+                        <h2 class="card-header">Form Tambah Stok Bahan Baku</h2>
                         <div class="content-midcontainer" style="width: 50%!important">
                         <div class="form-login">
                             {{ flashSession.output() }}
-                            {{ form('bahanbaku/save', 'name': 'bahanbaku', 'method': 'post') }}
+                            {{ form('logmasuk/save', 'name': 'logmasuk', 'method': 'post') }}
                             
                                 <label for="nama_bahan">Nama Bahan Baku:</label>
-                                {{ text_field('nama_bahan', 'placeholder': 'Masukkan nama bahan baku baru', 'required') }}
-
+                                {{ select('nama_bahan', bahanbaku, 'using': ['nama_bahan', 'nama_bahan'], 'class': 'form-control col-sm-4', 'style': 'width: 100%; margin: 8px 0px') }}
+                                
                                 <label for="kondisi_bahan">Kondisi Bahan Baku:</label>
                                 {{ select_static('kondisi_bahan', [
                                     'Segar': 'Segar', 

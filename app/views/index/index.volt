@@ -19,7 +19,7 @@
                 <a href="{{ url('/index') }}"><button class="active">Dashboard</button></a>
                 {% if session.get('login')['username'] is 'admin' %}
                 <a href="{{ url('bahanbaku/index') }}"><button>Bahan Baku</button></a>
-                <button>Bahan Baku Masuk</button>
+                <a href="{{ url('logmasuk/index') }}"><button>Bahan Baku Masuk</button></a>
                 <button>Bahan Baku Keluar</button>
                 {% endif %}
                 {% if session.get('login')['username'] is not 'admin' %}

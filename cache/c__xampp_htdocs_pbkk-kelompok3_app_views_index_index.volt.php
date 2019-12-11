@@ -19,7 +19,7 @@
                 <a href="<?= $this->url->get('/index') ?>"><button class="active">Dashboard</button></a>
                 <?php if ($this->session->get('login')['username'] == 'admin') { ?>
                 <a href="<?= $this->url->get('bahanbaku/index') ?>"><button>Bahan Baku</button></a>
-                <button>Bahan Baku Masuk</button>
+                <a href="<?= $this->url->get('logmasuk/index') ?>"><button>Bahan Baku Masuk</button></a>
                 <button>Bahan Baku Keluar</button>
                 <?php } ?>
                 <?php if ($this->session->get('login')['username'] != 'admin') { ?>

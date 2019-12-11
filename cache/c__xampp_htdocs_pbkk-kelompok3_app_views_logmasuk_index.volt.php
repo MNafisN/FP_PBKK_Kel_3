@@ -17,8 +17,8 @@
                     Selamat datang, <?= $this->session->get('login')['username'] ?>
                 </div>
                 <a href="<?= $this->url->get('/index') ?>"><button>Dashboard</button></a>
-                <a href="<?= $this->url->get('bahanbaku/index') ?>"><button class="active">Bahan Baku</button></a>
-                <a href="<?= $this->url->get('logmasuk/index') ?>"><button>Bahan Baku Masuk</button></a>
+                <a href="<?= $this->url->get('bahanbaku/index') ?>"><button>Bahan Baku</button></a>
+                <a href="<?= $this->url->get('logmasuk/index') ?>"><button class="active">Bahan Baku Masuk</button></a>
                 <button>Bahan Baku Keluar</button>
                 <div style="bottom: 0px; width: inherit; position: absolute">
                     <form action="<?= $this->url->get('/index/logout') ?>" method="post">
@@ -30,36 +30,45 @@
             <div class="tabcontent">
                 <div class="container">
                     <div class="card">
-                        <?php if (isset($bahanbaku)) { ?>
-                        <h3 class="card-header">Daftar Bahan Baku</h3>
+                        <?php if (isset($masuk)) { ?>
+                        <h3 class="card-header">Histori Bahan Baku Masuk</h3>
                         <table class="table table-bordered table-responsive-sm" id="calendar">
                             <thead>
                                 <tr>
                                     <th> Nama Bahan </th>
                                     <th> Kondisi Bahan </th>
                                     <th> Jumlah Bahan </th>
+                                    <th> Tanggal Keluar </th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php foreach ($bahanbaku as $bahan) { ?>
+                                <?php foreach ($masuk as $log_masuk) { ?>
+                                    <?php foreach ($bahanbaku as $bahan) { ?>
+                                        <?php if ($bahan->id_bahan == $log_masuk->id_bahan) { ?>
                                 <tr>
                                     <td>
                                         <?= $bahan->nama_bahan ?>
                                     </td>
                                     
                                     <td>
-                                        <?= $bahan->kondisi_bahan ?>
+                                        <?= $log_masuk->kondisi_bahan ?>
                                     </td>
                                     
                                     <td>
-                                        <?= $bahan->jumlah_bahan ?>
+                                        <?= $log_masuk->jumlah_bahan ?>
+                                    </td>
+
+                                    <td>
+                                        <?= $log_masuk->date_masuk ?>
                                     </td>
                                 </tr> 
+                                        <?php } ?>
+                                    <?php } ?>
                                 <?php } ?>
                             </tbody>
                         </table>
-                        <a href="<?= $this->url->get('/bahanbaku/form') ?>">
-                            <button class="btn2">Tambahkan Jenis Bahan Baku</button>
+                        <a href="<?= $this->url->get('/logmasuk/form') ?>">
+                            <button class="btn2">Tambahkan Stok Bahan Baku</button>
                         </a>
                         <?php } ?>
                     </div>
