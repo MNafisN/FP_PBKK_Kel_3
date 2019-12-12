@@ -66,6 +66,10 @@ class LogkeluarController extends ControllerBase
         foreach ($names as $bahan) {
             if ($bahan->kondisi_bahan == $kondisi_bahan) {
                 $id_bahan = $bahan->id_bahan;
+                if ($jumlah_bahan > $bahan->jumlah_bahan) {
+                    $this->flashSession->error('Stok tidak cukup');
+                    return $this->response->redirect('/logkeluar/form');
+                }
                 $jumlah_bahan_terbaru = $bahan->jumlah_bahan - $jumlah_bahan;
             }
         }
