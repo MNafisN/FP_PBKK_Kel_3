@@ -17,9 +17,9 @@
                     Selamat datang, {{ session.get('login')['username'] }}
                 </div>
                 <a href="{{ url('/index') }}"><button>Dashboard</button></a>
-                <a href="{{ url('bahanbaku/index') }}"><button class="active">Bahan Baku</button></a>
-                <a href="{{ url('logmasuk/index') }}"><button>Bahan Baku Masuk</button></a>
-                <button>Bahan Baku Keluar</button>
+                <a href="{{ url('bahanbaku/index') }}"><button>Bahan Baku</button></a>
+                <a href="{{ url('logmasuk/index') }}"><button class="active">Bahan Baku Masuk</button></a>
+                <a href="{{ url('logkeluar/index') }}"><button>Bahan Baku Keluar</button></a>
                 <div style="bottom: 0px; width: inherit; position: absolute">
                     <form action="{{ url('/index/logout') }}" method="post">
                         <button>Logout</button>

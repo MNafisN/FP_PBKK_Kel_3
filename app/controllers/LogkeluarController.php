@@ -1,9 +1,10 @@
 <?php
 
 use Models\bahanbakuModel;
-use Models\logmasukModel;
+use Models\simarModel;
+use Models\logkeluarModel;
 
-class LogmasukController extends ControllerBase
+class LogkeluarController extends ControllerBase
 {
     public function indexAction()
     {
@@ -12,8 +13,14 @@ class LogmasukController extends ControllerBase
             $this->assets->addCss('css/style.css');
             $this->assets->addCss('css/table.css');
 
-            $this->view->masuk = logmasukModel::find();
+            $this->view->keluar = logkeluarModel::find();
             $this->view->bahanbaku = bahanbakuModel::find();
+            $this->view->users = simarModel::find();
+
+            // $usrname = $this->session->get("login");
+            // $usrname2 = $usrname['username'];
+            // $this->view->users2 = simarModel::findByUsername($usrname2);
+            // var_dump($users2); return false;
         }
         else
         {
@@ -27,6 +34,7 @@ class LogmasukController extends ControllerBase
             $this->assets->addCss('css/style.css');
             $this->assets->addCss('css/table.css');
 
+            $this->view->users = simarModel::find();
             $this->view->bahanbaku = bahanbakuModel::find(['columns' => 'distinct nama_bahan']);
         }
         else
@@ -36,47 +44,51 @@ class LogmasukController extends ControllerBase
     }
     public function saveAction()
     {
-        $logmasuk = new logmasukModel();
+        $logkeluar = new logkeluarModel();
         $bahanbaku = new bahanbakuModel();
         
-        $cek_id = logmasukModel::findFirst(
+        $cek_id = logkeluarModel::findFirst(
             [
-                'order' => 'id_log_masuk DESC'
+                'order' => 'id_log_keluar DESC'
             ]
         );
-        $id_log_masuk = $cek_id->id_log_masuk;
-        ++$id_log_masuk;
+        $id_log_keluar = $cek_id->id_log_keluar;
+        ++$id_log_keluar;
+        $username = $this->request->getPost('username');
+        $user = simarModel::findFirstByUsername($username);
+        $id_user = $user->id_user;
         $nama_bahan = $this->request->getPost('nama_bahan');
         $kondisi_bahan = $this->request->getPost('kondisi_bahan');
         $jumlah_bahan = $this->request->getPost('jumlah_bahan');
         date_default_timezone_set('Asia/Jakarta');
-        $date_masuk = date("Y-m-d H:i:s");
+        $date_keluar = date("Y-m-d H:i:s");
         $names = bahanbakuModel::findByNama_bahan($nama_bahan);
         foreach ($names as $bahan) {
             if ($bahan->kondisi_bahan == $kondisi_bahan) {
                 $id_bahan = $bahan->id_bahan;
-                $jumlah_bahan_terbaru = $jumlah_bahan + $bahan->jumlah_bahan;
+                $jumlah_bahan_terbaru = $bahan->jumlah_bahan - $jumlah_bahan;
             }
         }
         
         if ($jumlah_bahan == '') {
             $this->flashSession->error('Data tidak lengkap');
-            return $this->response->redirect('/logmasuk/form');
+            return $this->response->redirect('/logkeluar/form');
         }
         else {
-            $logmasuk->id_log_masuk = $id_log_masuk;
-            $logmasuk->id_bahan = $id_bahan;
-            $logmasuk->kondisi_bahan = $kondisi_bahan;
-            $logmasuk->jumlah_bahan = $jumlah_bahan;
-            $logmasuk->date_masuk = $date_masuk;
+            $logkeluar->id_log_keluar = $id_log_keluar;
+            $logkeluar->id_bahan = $id_bahan;
+            $logkeluar->id_user = $id_user;
+            $logkeluar->kondisi_bahan = $kondisi_bahan;
+            $logkeluar->jumlah_bahan = $jumlah_bahan;
+            $logkeluar->date_keluar = $date_keluar;
 
             $bahanbaku->id_bahan = $id_bahan;
             $bahanbaku->nama_bahan = $nama_bahan;
             $bahanbaku->kondisi_bahan = $kondisi_bahan;
             $bahanbaku->jumlah_bahan = $jumlah_bahan_terbaru;
             
-            if ($logmasuk->save() === false) {
-                $messages = $logmasuk->getMessage();
+            if ($logkeluar->save() === false) {
+                $messages = $logkeluar->getMessage();
 
                 foreach ($messages as $message) {
                     $this->flashSession->error($message);
@@ -94,8 +106,8 @@ class LogmasukController extends ControllerBase
                 return $this->response->redirect('/bahanbaku/form');
             }
             else {
-                $this->flashSession->success('Bahan baku ditambahkan');
-                return $this->response->redirect('/logmasuk/form');
+                $this->flashSession->success('Bahan baku diambil');
+                return $this->response->redirect('/logkeluar/form');
             }
         }
     }

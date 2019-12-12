@@ -16,14 +16,14 @@
                 <div style="text-align: center; padding: 10px 0px">
                     Selamat datang, <?= $this->session->get('login')['username'] ?>
                 </div>
-                <a href="<?= $this->url->get('/index') ?>"><button class="active">Dashboard</button></a>
+                <a href="<?= $this->url->get('/index') ?>"><button>Dashboard</button></a>
                 <?php if ($this->session->get('login')['username'] == 'admin') { ?>
                 <a href="<?= $this->url->get('bahanbaku/index') ?>"><button>Bahan Baku</button></a>
                 <a href="<?= $this->url->get('logmasuk/index') ?>"><button>Bahan Baku Masuk</button></a>
-                <a href="<?= $this->url->get('logkeluar/index') ?>"><button>Bahan Baku Keluar</button></a>
+                <a href="<?= $this->url->get('logkeluar/index') ?>"><button class="active">Bahan Baku Keluar</button></a>
                 <?php } ?>
                 <?php if ($this->session->get('login')['username'] != 'admin') { ?>
-                <a href="<?= $this->url->get('logkeluar/index') ?>"><button>Ambil Bahan Baku</button></a>
+                <a href="<?= $this->url->get('logkeluar/index') ?>"><button class="active">Ambil Bahan Baku</button></a>
                 <?php } ?>
                 <div style="bottom: 0px; width: inherit; position: absolute">
                     <form action="<?= $this->url->get('/index/logout') ?>" method="post">
@@ -34,49 +34,6 @@
 
             <div class="tabcontent">
                 <div class="container">
-                    <?php if ($this->session->get('login')['username'] == 'admin') { ?>
-                    <div class="card">
-                        <?php if (isset($masuk)) { ?>
-                        <h3 class="card-header">Histori Bahan Baku Masuk</h3>
-                        <table class="table table-bordered table-responsive-sm" id="calendar">
-                            <thead>
-                                <tr>
-                                    <th> Nama Bahan </th>
-                                    <th> Kondisi Bahan </th>
-                                    <th> Jumlah Bahan </th>
-                                    <th> Tanggal Keluar </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($masuk as $log_masuk) { ?>
-                                    <?php foreach ($bahanbaku as $bahan) { ?>
-                                        <?php if ($bahan->id_bahan == $log_masuk->id_bahan) { ?>
-                                <tr>
-                                    <td>
-                                        <?= $bahan->nama_bahan ?>
-                                    </td>
-                                    
-                                    <td>
-                                        <?= $log_masuk->kondisi_bahan ?>
-                                    </td>
-                                    
-                                    <td>
-                                        <?= $log_masuk->jumlah_bahan ?>
-                                    </td>
-
-                                    <td>
-                                        <?= $log_masuk->date_masuk ?>
-                                    </td>
-                                </tr> 
-                                        <?php } ?>
-                                    <?php } ?>
-                                <?php } ?>
-                            </tbody>
-                        </table>
-                        <?php } ?>
-                    </div>
-                    <?php } ?>
-                    <br>
                     <div class="card">
                     <?php if (isset($keluar)) { ?>
                         <?php if ($this->session->get('login')['username'] == 'admin') { ?>
@@ -159,7 +116,10 @@
                                 <?php } ?>
                             </tbody>
                         </table>
-                    <?php } ?>
+                        <a href="<?= $this->url->get('/logkeluar/form') ?>">
+                            <button class="btn2">Ambil Stok Bahan Baku</button>
+                        </a>
+                        <?php } ?>
                     </div>
                 </div>
             </div>

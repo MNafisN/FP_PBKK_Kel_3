@@ -4,7 +4,7 @@
     {{ assets.outputCss() }}  
 {% endblock %}
 {% block body %}
-    {% if session.get('login')['username'] is 'admin' %}
+    {% if session.has('login') %}    
     <div class="header">
 		<div class="header-container">
 			SIMAR
@@ -17,9 +17,14 @@
                     Selamat datang, {{ session.get('login')['username'] }}
                 </div>
                 <a href="{{ url('/index') }}"><button>Dashboard</button></a>
-                <a href="{{ url('bahanbaku/index') }}"><button class="active">Bahan Baku</button></a>
+                {% if session.get('login')['username'] is 'admin' %}
+                <a href="{{ url('bahanbaku/index') }}"><button>Bahan Baku</button></a>
                 <a href="{{ url('logmasuk/index') }}"><button>Bahan Baku Masuk</button></a>
-                <a href="{{ url('logkeluar/index') }}"><button>Bahan Baku Keluar</button></a>
+                <a href="{{ url('logkeluar/index') }}"><button class="active">Bahan Baku Keluar</button></a>
+                {% endif %}
+                {% if session.get('login')['username'] is not 'admin' %}
+                <a href="{{ url('logkeluar/index') }}"><button class="active">Ambil Bahan Baku</button></a>
+                {% endif %}
                 <div style="bottom: 0px; width: inherit; position: absolute">
                     <form action="{{ url('/index/logout') }}" method="post">
                         <button>Logout</button>
@@ -30,15 +35,24 @@
             <div class="tabcontent">
                 <div class="container">
                     <div class="card">
-                        <h2 class="card-header">Form Bahan Baku Baru</h2>
+                        <h2 class="card-header">Form Ambil Stok Bahan Baku</h2>
                         <div class="content-midcontainer" style="width: 50%!important">
                         <div class="form-login">
                             {{ flashSession.output() }}
-                            {{ form('bahanbaku/save', 'name': 'bahanbaku', 'method': 'post') }}
+                            {{ form('logkeluar/save', 'name': 'logkeluar', 'method': 'post') }}
                             
-                                <label for="nama_bahan">Nama Bahan Baku:</label>
-                                {{ text_field('nama_bahan', 'placeholder': 'Masukkan nama bahan baku baru', 'required') }}
+                                {% if session.get('login')['username'] is 'admin' %}
+                                    <label for="username">Nama Pengambil Bahan:</label>
+                                    {{ select('username', users, 'using': ['username', 'nama_karyawan'], 'class': 'form-control col-sm-4', 'style': 'width: 100%; margin: 8px 0px') }}
+                                {% endif %}
 
+                                {% if session.get('login')['username'] is not 'admin' %}
+                                    {{ hidden_field('username', 'value': session.get('login')['username']) }}
+                                {% endif %}
+
+                                <label for="nama_bahan">Nama Bahan Baku:</label>
+                                {{ select('nama_bahan', bahanbaku, 'using': ['nama_bahan', 'nama_bahan'], 'class': 'form-control col-sm-4', 'style': 'width: 100%; margin: 8px 0px') }}
+                                
                                 <label for="kondisi_bahan">Kondisi Bahan Baku:</label>
                                 {{ select_static('kondisi_bahan', [
                                     'Segar': 'Segar', 

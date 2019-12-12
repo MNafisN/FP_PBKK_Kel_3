@@ -19,7 +19,7 @@
                 <a href="{{ url('/index') }}"><button>Dashboard</button></a>
                 <a href="{{ url('bahanbaku/index') }}"><button>Bahan Baku</button></a>
                 <a href="{{ url('logmasuk/index') }}"><button class="active">Bahan Baku Masuk</button></a>
-                <button>Bahan Baku Keluar</button>
+                <a href="{{ url('logkeluar/index') }}"><button>Bahan Baku Keluar</button></a>
                 <div style="bottom: 0px; width: inherit; position: absolute">
                     <form action="{{ url('/index/logout') }}" method="post">
                         <button>Logout</button>
